@@ -9,6 +9,11 @@ jobs:
     runs-on: jeong
 
     steps:
+    # 파워쉘 관리자 권한 세팅
+      - name: Allow PowerShell scripts
+        run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+        shell: powershell
+        
       - name: checkout repo
         uses: actions/checkout@v4
 
