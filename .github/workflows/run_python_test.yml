@@ -1,0 +1,35 @@
+name: Run Python test
+
+on:
+  issues:
+    types:
+      - opened # 새로운 issues가 열릴 때마다 실행
+jobs:
+  run-code:
+    runs-on: jeong
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: setup python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.12
+
+      # - name: install Python dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt
+
+      - name: Run Python script
+        run : python change.py
+
+      - name: Commit and push changes
+        if: steps.changed-files.outputs.files_changed == 'true'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update html by actions"
+          git push https://${{ secrets.GH_TOKEN }}@github.com/op6161/action_test.git HEAD:main
