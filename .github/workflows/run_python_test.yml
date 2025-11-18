@@ -10,10 +10,13 @@ jobs:
 
     steps:
     # ExecutionPolicy를 Bypass로 지정
-      - name: Run setup script
-        run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File ./setup.ps1
-          
+      # - name: Run setup script
+      #   run: |
+      #     powershell -NoProfile -ExecutionPolicy Bypass -File ./setup.ps1
+         #  안먹어서 직접 파워셸에서 했다
+         # Set-ExecutionPolicy RemoteSigned -Scope LocalMachine -Force
+         # 안전한건지는 모르겠음. ps1에 내가 파워셸 켤 때 파이선 가상환경 실행 그거 해놔서 저 오류가 기본적으로 뜬 듯
+         
       # 파워쉘 관리자 권한 세팅
       - name: Allow PowerShell scripts
         run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
