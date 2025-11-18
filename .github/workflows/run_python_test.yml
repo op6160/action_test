@@ -1,5 +1,8 @@
 name: Run Python test
 
+permissions:
+  contents: write
+
 on:
   issues:
     types:
@@ -47,12 +50,16 @@ jobs:
       #     git commit -m "Update html by actions"
       #     git push https://${{ secrets.GH_TOKEN }}@github.com/op6161/action_test.git HEAD:main
 
-          
-      - name: Commit and push changes
+      - name: Commit and Push
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add .
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
           git commit -m "Update html by actions"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/op6161/action_test.git
-          git push origin HEAD:main
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "No changes to commit"
+          } else {
+            git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+            git push origin HEAD:${{ github.ref }}
+          }
+        shell: pwsh
