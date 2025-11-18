@@ -9,7 +9,12 @@ jobs:
     runs-on: jeong
 
     steps:
-    # 파워쉘 관리자 권한 세팅
+    # 파워쉘 프로필 로드 안하도록 제한
+      - name: Allow PowerShell scripts
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force"
+          
+      # 파워쉘 관리자 권한 세팅
       - name: Allow PowerShell scripts
         run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
         shell: powershell
