@@ -39,10 +39,20 @@ jobs:
       - name: Run Python script
         run : python change.py
 
+      # - name: Commit and push changes
+      #   run: |
+      #     git config user.name "GitHub Actions"
+      #     git config user.email "actions@github.com"
+      #     git add .
+      #     git commit -m "Update html by actions"
+      #     git push https://${{ secrets.GH_TOKEN }}@github.com/op6161/action_test.git HEAD:main
+
+          
       - name: Commit and push changes
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update html by actions"
-          git push https://${{ secrets.GH_TOKEN }}@github.com/op6161/action_test.git HEAD:main
+          git commit -m "Update html by actions" || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/op6161/action_test.git
+          git push origin HEAD:main
