@@ -1,21 +1,37 @@
 name: Deploy to GitHub Pages
 
+# on (workflow의 실행 조건)을 선언
 on:
+# push를 감지할 경우
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때마다 실행
+      - main
 
+# jobs를 선언
 jobs:
+# deploy job
   deploy:
+# deploy job은 ubuntu 가상머신에서 실행
     runs-on: ubuntu-latest
-
+		
+# steps를 선언
     steps:
+# step 1 Repository checkout
+# actions/checkout(release2)를 이용
+# ubuntu 가상머신에 repository를 checkout(복제)
       - name: Checkout code
-        uses: actions/checkout@v2  # 코드를 체크아웃하는 단계
+        uses: actions/checkout@v2
 
+# step 2 deploy action
+# JamesIves/github-pages-deploy-action(release4)를 이용
       - name: Set up GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
+# 옵션을 설정
         with:
-          branch: gh-pages  # 배포할 브랜치 설정 (gh-pages)
-          folder: .  # 루트 디렉토리부터 배포 (원하는 디렉토리로 설정 가능)
+# 배포할 브랜치 설정 (gh-pages)
+          branch: gh-pages  
+# 루트 디렉토리부터 배포 (원하는 디렉토리로 설정 가능)
+          folder: .  
+# repository의 secrets 변수인 GH_TOKEN
+# GH_TOKEN에는 PAT(Personal Access Tokens값이 입력되어 있음)
           token: ${{ secrets.GH_TOKEN }}
