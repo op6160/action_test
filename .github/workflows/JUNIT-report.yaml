@@ -8,30 +8,73 @@ on:
       - main
 
 jobs:
-  report:
+  report-basic:
     runs-on: ubuntu-latest
     permissions:
       checks: write # 필수
       contents: read 
       pull-requests: write
+      
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
     # 간단한 리포트 출력뿐이라면 이것만으로도 가능
     # 하지만 기존에 있던 테스트 결과 추이 출력이 불가능함
-    # - name: Publish test report
-    #   uses: dorny/test-reporter@v1.9.1
-    #   with:
-    #     name: test tests
-    #     path: junit-report.xml
-    #     reporter: java-junit
-    #     fail-on-error: false
-
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action/linux@v2
-      if: always()
+    - name: Publish test report
+      uses: dorny/test-reporter@v1.9.1
       with:
-        files: junit-report.xml
-        comment_mode: always
-        check_name: "Test Results"
+        name: test tests
+        path: junit-report.xml
+        reporter: java-junit
+        fail-on-error: false
+    # 이것도 좀 이쁘긴 한데 추이 출력은 안되네
+    # - name: Publish Test Results
+    #   uses: EnricoMi/publish-unit-test-result-action/linux@v2
+    #   if: always()
+    #   with:
+    #     files: junit-report.xml
+    #     comment_mode: always
+    #     check_name: "Test Results"
+    
+  test-and-report:
+    runs-on: jeong
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. 테스트 실행 (JUnit XML 생성)
+      # - name: Run Tests
+      #   run: |
+      #     # pytest 실행 시 --alluredir 옵션으로 결과 폴더 지정 필수!
+      #     # pip install allure-pytest 먼저 해야 함
+      #     pytest --alluredir=allure-results
+      #   continue-on-error: true
+
+      # 2. Allure 리포트 생성 (HTML 변환)
+      # simple-elf/allure-report-action을 가장 많이 씀
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          # 이전에 배포된 gh-pages의 history를 가져와야 그래프가 그려짐!
+          allure_history: gh-pages/allure-history 
+          keep_reports: 20
+
+      # 3. GitHub Pages에 배포 (기존 사이트 하위 폴더에)
+      - name: Deploy Report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report # 위 단계에서 생성된 HTML 폴더
+          destination_dir: test-report # https://.../test-report 로 접속
+          keep_files: true # 중요: 기존 gh-pages 내용 유지
