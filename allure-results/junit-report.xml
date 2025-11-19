@@ -2,7 +2,9 @@
 <testsuites disabled="0" errors="0" failures="1" tests="3" time="73.27741718292236">
 	<testsuite disabled="0" errors="0" failures="1" name="TESTNAME" skipped="0" tests="3" time="73.27741718292236">
 		<testcase name="TESTCASE1" time="27.774715"/>
+			<failure type="failure" message="FAILED">FAILED: Action, Check velocity, UTILITY</failure>
 		<testcase name="TESTCASE2" time="23.836568"/>
+			<failure type="failure" message="FAILED">FAILED: Action, Check velocity, UTILITY</failure>
 		<testcase name="TESTCASE3" time="21.666134">
 		</testcase>
 	</testsuite>
