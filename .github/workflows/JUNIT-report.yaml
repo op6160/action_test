@@ -17,11 +17,21 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      
+    # 간단한 리포트 출력뿐이라면 이것만으로도 가능
+    # 하지만 기존에 있던 테스트 결과 추이 출력이 불가능함
+    # - name: Publish test report
+    #   uses: dorny/test-reporter@v1.9.1
+    #   with:
+    #     name: test tests
+    #     path: junit-report.xml
+    #     reporter: java-junit
+    #     fail-on-error: false
 
-    - name: Publish test report
-      uses: dorny/test-reporter@v1.9.1
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/linux@v2
+      if: always()
       with:
-        name: test tests
-        path: junit-report.xml
-        reporter: java-junit
-        fail-on-error: false
+        files: junit-report.xml
+        comment_mode: always
+        check_name: "Test Results"
