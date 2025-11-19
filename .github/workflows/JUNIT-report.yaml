@@ -63,9 +63,12 @@ jobs:
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         if: always()
+        id: allure-report
         with:
           allure_results: allure-results
+          gh_pages: gh_pages
           # 이전에 배포된 gh-pages의 history를 가져와야 그래프가 그려짐!
+          allure_report: allure-report
           allure_history: gh-pages/allure-history 
           keep_reports: 20
 
@@ -75,6 +78,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: allure-report # 위 단계에서 생성된 HTML 폴더
+          # publish_dir: allure-report # 위 단계에서 생성된 HTML 폴더
+          publish_dir: allure-history
           destination_dir: test-report # https://.../test-report 로 접속
           keep_files: true # 중요: 기존 gh-pages 내용 유지
