@@ -7,7 +7,7 @@ on:
   issues:
     types:
       - opened # 새로운 issues가 열릴 때마다 실행
-	  
+
 # jeong 이라는 self-hosted runner(내 컴퓨터)를 지정
 jobs:
   run-code:
