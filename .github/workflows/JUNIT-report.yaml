@@ -76,10 +76,14 @@ jobs:
       - name: Deploy Report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: allure-report # 위 단계에서 생성된 HTML 폴더
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GH_TOKEN }}
           PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history
+        # with:
+        #   github_token: ${{ secrets.GH_TOKEN }}
+        #   publish_dir: allure-report # 위 단계에서 생성된 HTML 폴더
+        #   PUBLISH_BRANCH: gh-pages
           # publish_dir: allure-history
           # destination_dir: test-report # https://.../test-report 로 접속
           # keep_files: true # 중요: 기존 gh-pages 내용 유지
