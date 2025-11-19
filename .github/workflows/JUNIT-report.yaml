@@ -54,14 +54,19 @@ jobs:
       # simple-elf/allure-report-action을 가장 많이 씀
       - name: Get Allure history
         uses: actions/checkout@v4
+        
         continue-on-error: true
+        if: always()
         with:
+          token: ${{ secrets.GH_TOKEN }}
           ref: gh-pages
           path: gh-pages
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
+        if: always()
         with:
+          gh_pages: gh_pages
           allure_results: allure-results
           allure_history: allure-history
           keep_reports: 20
@@ -72,6 +77,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
+          token: ${{ secrets.GH_TOKEN }}
           github_token: ${{ secrets.GH_TOKEN }}
           # github_token: ${{ secrets.GH_TOKEN }}
           # github_token: ${{ secrets.GITHUB_TOKEN }}
