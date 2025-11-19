@@ -1,0 +1,27 @@
+name: JUnit reporter
+
+# on (workflow의 실행 조건)을 선언
+on:
+# push를 감지할 경우
+  push:
+    branches:
+      - main
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write # 필수
+      contents: read 
+      pull-requests: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Publish test report
+      uses: dorny/test-reporter@v1.9.1
+      with:
+        name: test tests
+        path: junit-report.xml
+        reporter: java-junit
+        token: ${{ secrets.GH_TOKEN }}
