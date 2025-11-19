@@ -54,7 +54,6 @@ jobs:
       # simple-elf/allure-report-action을 가장 많이 씀
       - name: Get Allure history
         uses: actions/checkout@v4
-        if: always()
         continue-on-error: true
         with:
           ref: gh-pages
@@ -62,20 +61,15 @@ jobs:
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
-        if: always()
-        id: allure-report
         with:
-          allure_results: build/allure-results
-          gh_pages: gh_pages
-          # 이전에 배포된 gh-pages의 history를 가져와야 그래프가 그려짐!
-          allure_report: allure-report
-          allure_history: allure-history 
+          allure_results: allure-results
+          allure_history: allure-history
           keep_reports: 20
+
 
       # 3. GitHub Pages에 배포 (기존 사이트 하위 폴더에)
       - name: Deploy Report
-        uses: peaceiris/actions-gh-pages@v3
-        if: always()
+        uses: peaceiris/actions-gh-pages@v4
 
         with:
           github_token: ${{ secrets.GH_TOKEN }}
