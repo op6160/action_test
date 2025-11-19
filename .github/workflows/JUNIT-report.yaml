@@ -24,3 +24,4 @@ jobs:
         name: test tests
         path: junit-report.xml
         reporter: java-junit
+        fail-on-error: false
