@@ -1,10 +1,15 @@
 name: Run Python test
 
-permissions:
-  contents: write
+# permissions 설정
+# PAT토큰 설정을 했으니 사실 이게 없어도 될 지도 모른다는 생각을 하는 중이라 한 번 없애보겠음
+# permissions:
+#   contents: write
 
+# on (workflow의 실행 조건)을 선언
 on:
+# issues에 대해서
   issues:
+# opened 될 경우
     types:
       - opened # 새로운 issues가 열릴 때마다 실행
 
@@ -13,25 +18,39 @@ jobs:
   run-code:
     runs-on: jeong
 
-# push시 다른 워크플로우가 자동적으로 실행 되도록 하기 위해, PAT 토큰을 추가
-    steps:       
+    steps:
+# 파워셸 관리자 권한 세팅 없어도 실행이 됐다.
+# 권한 문제.. 인가 아무튼 해결 방법은 이게 맞긴 한데, github actions상으로, 터미널에 오류가 발생했을 때 작업이 실패하는 것처럼 보여서
+# actions step으로 입력이 애초에 불가능했고, 이 커맨드를 터미널에 입력하는 걸로 해결할 수 있었다. 아무튼 기록용으로 남겨둠
+      # - name: Allow PowerShell scripts
+      #   run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+      #   shell: powershell
+
+# push시 다른 워크플로우가 자동적으로 실행 되도록 하기 위해, PAT 토큰을 추가하여 checkout하도록 token을 설정
+# 아무래도 actions의 무한루프 방지를 위한 장치가 있는 듯 하다.
       - name: checkout repo
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
 
-# 매번 다운로드 하지 않고 캐시된 버전을 사용함		
+# 3.12 버전을 사용함
+# 매번 다운로드 하지 않고 캐시된 버전을 사용함
       - name: setup python
         uses: actions/setup-python@v6
         with:
           python-version: 3.12
           check-latest: false 
 
-
+# change.py를 싫행시킴
       - name: Run Python script
         run : python change.py
 
+# git에 관련된 내용 추가
+# 여러 줄의 커맨드도 실행 가능하다
+# 근데 지금 사용하는게 서버가 아니라 self-hosted runner 인데..
+# 서버가 아닌 평소 사용중인 pc에서 이렇게 하려면, 실제로는 git config 등을 다시 되돌리는 post작업을 수행하는 워크플로우도 따로 만들어야 할 것 같네..
+# 서버컴퓨터더라도 그럴 수도 있고 어쨌든
       - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
