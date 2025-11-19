@@ -7,15 +7,16 @@ on:
   issues:
     types:
       - opened # 새로운 issues가 열릴 때마다 실행
+
+# jeong 이라는 self-hosted runner(내 컴퓨터)를 지정
 jobs:
   run-code:
-	  # jeong 이라는 self-hosted runner(내 컴퓨터)를 지정
     runs-on: jeong
-
+	
     steps:       
+		# push시 다른 워크플로우가 자동적으로 실행 되도록 하기 위해, PAT 토큰을 추가
       - name: checkout repo
         uses: actions/checkout@v4
-        # push시 다른 워크플로우가 자동적으로 실행 되도록 하기 위해, PAT 토큰을 추가
         with:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
