@@ -27,6 +27,10 @@ jobs:
         
       - name: checkout repo
         uses: actions/checkout@v4
+        # push시 다른 워크플로우가 자동적으로 실행 되도록 하기 위해, PAT 토큰을 추가
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
 
       - name: setup python
         uses: actions/setup-python@v6
