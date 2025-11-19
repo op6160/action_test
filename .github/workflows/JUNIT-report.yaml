@@ -80,8 +80,8 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
-        # with:
-        #   github_token: ${{ secrets.GH_TOKEN }}
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
         #   publish_dir: allure-report # 위 단계에서 생성된 HTML 폴더
         #   PUBLISH_BRANCH: gh-pages
           # publish_dir: allure-history
